@@ -5,18 +5,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 import Row from "./Row.vue";
 
-export default defineComponent{
-  name: "GameGrid",
+export default defineComponent({
+  props: {
+    grid: {
+      type: Array as PropType<string[]>,
+      required: true,
+    },
+  },
   components: {
     Row,
   },
-  props: {
-    grid: Array, // of String
-  },
-};
+});
 </script>
 
 <style lang="scss" scoped>

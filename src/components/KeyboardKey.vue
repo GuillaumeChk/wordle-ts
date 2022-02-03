@@ -7,13 +7,12 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-export default defineComponent{
-  name: "KeyboardKey",
+export default defineComponent({
   props: {
     letter: String,
   },
   emits: ["addLetter"],
-};
+});
 </script>
 
 <style scoped>

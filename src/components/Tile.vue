@@ -5,12 +5,11 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-export default defineComponent{
-  name: "Tile",
+export default defineComponent({
   props: {
     letter: String,
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

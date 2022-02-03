@@ -7,72 +7,91 @@
       <p>
         {{ result }}
       </p>
-      <button class="closeBtn" @click="this.showResult = false">X</button>
+      <button class="closeBtn" @click="showResult = false">X</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
 import GameGrid from "./components/GameGrid.vue";
 import Keyboard from "./components/Keyboard.vue";
 
-export default defineComponent{
-  name: "App",
+export default defineComponent({
   components: {
     GameGrid,
     Keyboard,
   },
-  data() {
-    return {
-      grid: ["", "", "", "", "", ""],
-      currentRow: 0,
-      word: "",
-      wordsList: ["loupe", "aigle", "chien", "boite", "flute"],
-      result: "GAGNÉ",
-      showResult: false,
-    };
-  },
-  methods: {
-    addLetter(letter: string) {
-      if (this.grid[this.currentRow].length < 5) {
-        this.grid[this.currentRow] += letter;
+  setup() {
+    let grid: Array<string> = ["", "", "", "", "", ""];
+    let currentRow = 0;
+    let word = "";
+    let wordsList: Array<string> = [
+      "loupe",
+      "aigle",
+      "chien",
+      "boite",
+      "flute",
+    ];
+    let result = "";
+    let showResult = false;
+
+    function addLetter(letter: string) {
+      if (grid[currentRow].length < 5) {
+        grid[currentRow] += letter;
       }
-    },
-    getRandomInt(max: number) {
+    }
+
+    function getRandomInt(max: number) {
       return Math.floor(Math.random() * max);
-    },
-    validate() {
-      const word = this.grid[this.currentRow];
-      if (word === this.word && this.wordsList.includes(word)) {
-        this.result = "GAGNÉ";
-        this.showResult = true;
+    }
+
+    function validate() {
+      const wordSent = grid[currentRow];
+      if (wordSent === word && wordsList.includes(wordSent)) {
+        result = "GAGNÉ";
+        showResult = true;
         console.log("GAGNÉ");
-      } else if (this.wordsList.includes(word)) {
+      } else if (wordsList.includes(wordSent)) {
         console.log("Incorrect");
-        this.currentRow++;
-        if (this.currentRow == 6) {
+        currentRow++;
+        if (currentRow == 6) {
           console.log("perdu");
-          this.result = "PERDU";
-          this.showResult = true;
+          result = "PERDU";
+          showResult = true;
         }
       } else {
-        console.log("mot entré : " + word);
-        console.log("mot à trouver : " + this.word);
-        this.result = "Ce mot n'est pas dans la liste.";
-        this.showResult = true;
+        console.log("mot entré : " + wordSent);
+        console.log("mot à trouver : " + word);
+        result = "Ce mot n'est pas dans la liste.";
+        showResult = true;
       }
-    },
-    clear() {
-      if (this.grid[this.currentRow].length > 0) {
-        this.grid[this.currentRow] = this.grid[this.currentRow].slice(0, -1);
+    }
+
+    function clear() {
+      if (grid[currentRow].length > 0) {
+        grid[currentRow] = grid[currentRow].slice(0, -1);
       }
-    },
+    }
+
+    onMounted(() => {
+      word = wordsList[getRandomInt(wordsList.length - 1)];
+    });
+
+    return {
+      grid,
+      currentRow,
+      word,
+      wordsList,
+      result,
+      showResult,
+
+      addLetter,
+      validate,
+      clear,
+    };
   },
-  mounted() {
-    this.word = this.wordsList[this.getRandomInt(this.wordsList.length - 1)];
-  },
-};
+});
 </script>
 
 <style lang="scss">

@@ -15,12 +15,12 @@
 import { defineComponent } from "vue";
 import KeyboardKey from "./KeyboardKey.vue";
 
-export default defineComponent{
-  name: "Keyboard",
+export default defineComponent({
+  emits: ["addLetter", "validate", "clear"],
   components: {
     KeyboardKey,
   },
-  data() {
+  setup() {
     return {
       keyboard: [
         "a",
@@ -53,8 +53,7 @@ export default defineComponent{
       ],
     };
   },
-  emits: ["addLetter", "validate", "clear"],
-};
+});
 </script>
 
 <style scoped>
