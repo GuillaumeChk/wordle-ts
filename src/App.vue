@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { ref, defineComponent, onMounted } from "vue";
 import GameGrid from "./components/GameGrid.vue";
 import Keyboard from "./components/Keyboard.vue";
 
@@ -23,7 +23,7 @@ export default defineComponent({
     Keyboard,
   },
   setup() {
-    let grid: Array<string> = ["", "", "", "", "", ""];
+    let grid = ref(["", "", "", "", "", ""]);
     let currentRow = 0;
     let word = "";
     let wordsList: Array<string> = [
@@ -37,9 +37,10 @@ export default defineComponent({
     let showResult = false;
 
     function addLetter(letter: string) {
-      if (grid[currentRow].length < 5) {
-        grid[currentRow] += letter;
+      if (grid.value[currentRow].length < 5) {
+        grid.value[currentRow] += letter;
       }
+      console.log(grid.value[0]);
     }
 
     function getRandomInt(max: number) {
@@ -47,7 +48,7 @@ export default defineComponent({
     }
 
     function validate() {
-      const wordSent = grid[currentRow];
+      const wordSent = grid.value[currentRow];
       if (wordSent === word && wordsList.includes(wordSent)) {
         result = "GAGNÉ";
         showResult = true;
@@ -69,8 +70,8 @@ export default defineComponent({
     }
 
     function clear() {
-      if (grid[currentRow].length > 0) {
-        grid[currentRow] = grid[currentRow].slice(0, -1);
+      if (grid.value[currentRow].length > 0) {
+        grid.value[currentRow] = grid.value[currentRow].slice(0, -1);
       }
     }
 
@@ -80,9 +81,6 @@ export default defineComponent({
 
     return {
       grid,
-      currentRow,
-      word,
-      wordsList,
       result,
       showResult,
 

@@ -1,6 +1,10 @@
 <template>
   <div class="row">
-    <Tile v-for="index in 5" :letter="word.charAt(index)" :key="index" />
+    <Tile
+      v-for="index in 5"
+      :letter="word.charAt(index - 1)"
+      :key="index - 1"
+    />
 
     <!-- <Tile id="0" :letter="word.charAt(0)" />
     <Tile id="1" :letter="word.charAt(1)" />
