@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>WORDLE</h1>
-    <GameGrid :grid="grid" />
+    <GameGrid :grid="grid" :grid-states="gridStates" />
     <Keyboard @addLetter="addLetter" @validate="validate" @clear="clear" />
     <div class="result" v-if="showResult">
       <p>
@@ -23,17 +23,18 @@ export default defineComponent({
     Keyboard,
   },
   setup() {
-    let grid = ref(["", "", "", "", "", ""]);
-    let currentRow = 0;
-    let word = "";
+    let grid = ref(["", "", "", "", "", ""]); // grille des mots entrés
+    let gridStates = ref(["", "", "", "", "", ""]); // grille des états des lettres (valide, present, incorrect)
+    let currentRow = 0; // ligne en cours
+    let word = ""; // mot à trouver
     let wordsList: Array<string> = [
       "loupe",
       "aigle",
       "chien",
       "boite",
       "flute",
-    ];
-    let result = "";
+    ]; // dictionnaire
+    let result = ""; // message de validation
     let showResult = false;
 
     function addLetter(letter: string) {
@@ -47,21 +48,50 @@ export default defineComponent({
       return Math.floor(Math.random() * max);
     }
 
+    function validateState() {
+      const wordSent = grid.value[currentRow];
+
+      console.log("validation... " + wordSent);
+      console.log(gridStates.value[currentRow]);
+
+      for (let i = 0; i < wordSent.length; i++) {
+        if (word.charAt(i) === wordSent.charAt(i)) {
+          gridStates.value[currentRow] += "v"; // valid
+        } else if (word.includes(wordSent[i])) {
+          gridStates.value[currentRow] += "p"; // present
+        } else {
+          gridStates.value[currentRow] += "i"; // incorrect
+        }
+      }
+    }
+
     function validate() {
       const wordSent = grid.value[currentRow];
+
+      if (wordSent.length != 5) {
+        return;
+      }
+
       if (wordSent === word && wordsList.includes(wordSent)) {
+        // Bon mot.
+        validateState();
         result = "GAGNÉ";
         showResult = true;
         console.log("GAGNÉ");
       } else if (wordsList.includes(wordSent)) {
+        // Mot appartenant au dictionnaire
+
+        validateState();
         console.log("Incorrect");
         currentRow++;
         if (currentRow == 6) {
+          // mais limite d'essai atteinte
           console.log("perdu");
           result = "PERDU";
           showResult = true;
         }
       } else {
+        // Mot n'appartenant pas au dictionnaire
         console.log("mot entré : " + wordSent);
         console.log("mot à trouver : " + word);
         result = "Ce mot n'est pas dans la liste.";
@@ -81,6 +111,7 @@ export default defineComponent({
 
     return {
       grid,
+      gridStates,
       result,
       showResult,
 

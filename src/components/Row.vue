@@ -4,6 +4,7 @@
       v-for="index in 5"
       :letter="word.charAt(index - 1)"
       :key="index - 1"
+      :letter-state="wordState.charAt(index - 1)"
     />
 
     <!-- <Tile id="0" :letter="word.charAt(0)" />
@@ -21,6 +22,10 @@ import Tile from "./Tile.vue";
 export default defineComponent({
   props: {
     word: {
+      type: String,
+      required: true,
+    },
+    wordState: {
       type: String,
       required: true,
     },

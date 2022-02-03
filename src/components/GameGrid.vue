@@ -1,6 +1,11 @@
 <template>
   <div class="gameGrid">
-    <Row v-for="(word, index) in grid" :word="word" :key="index" />
+    <Row
+      v-for="(word, index) in grid"
+      :word="word"
+      :key="index"
+      :word-state="gridStates[index]"
+    />
   </div>
 </template>
 
@@ -11,6 +16,10 @@ import Row from "./Row.vue";
 export default defineComponent({
   props: {
     grid: {
+      type: Array as PropType<string[]>,
+      required: true,
+    },
+    gridStates: {
       type: Array as PropType<string[]>,
       required: true,
     },
