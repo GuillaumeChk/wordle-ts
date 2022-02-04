@@ -1,7 +1,11 @@
 <template>
   <div
     class="tile"
-    :class="{ present: isPresent, valid: isValid, incorrect: isIncorrect }"
+    :class="{
+      present: letterState === 'p',
+      valid: letterState === 'v',
+      incorrect: letterState === 'i',
+    }"
   >
     {{ letter }}
   </div>
@@ -17,26 +21,6 @@ export default defineComponent({
       type: String,
       required: true,
     },
-  },
-
-  setup(props) {
-    let isPresent = false;
-    let isValid = false;
-    let isIncorrect = false;
-
-    if (props.letterState === "v") {
-      isValid = true;
-    } else if (props.letterState === "p") {
-      isPresent = true;
-    } else if (props.letterState === "i") {
-      isIncorrect = true;
-    }
-
-    return {
-      isPresent,
-      isValid,
-      isIncorrect,
-    };
   },
 });
 </script>
